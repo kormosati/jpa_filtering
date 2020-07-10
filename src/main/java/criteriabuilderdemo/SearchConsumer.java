@@ -37,7 +37,7 @@ public class SearchConsumer<T> implements Consumer<SearchCriteria> {
         } else if (operation.equals(EQUAL_TO)) {
             predicate = criteriaBuilder.and(
                     predicate,
-                    criteriaBuilder.like(root.get(key), "%" + value + "%"));
+                    criteriaBuilder.equal(root.get(key), value));
         }
     }
 

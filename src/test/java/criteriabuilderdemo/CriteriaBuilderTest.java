@@ -4,6 +4,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import model.TestEntity;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import util.HibernateUtil;
@@ -14,6 +15,8 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class CriteriaBuilderTest {
@@ -62,9 +65,8 @@ public class CriteriaBuilderTest {
         searchCriteriaList.add(
                 SearchCriteria.builder()
                 .key("age")
-                .operation(Operation.GREATER_THAN)
+                .operation(Operation.EQUAL_TO)
                 .value(30).build()
-
         );
 
         searchCriteriaList.forEach(searchConsumer);
@@ -72,6 +74,9 @@ public class CriteriaBuilderTest {
         query.where(searchConsumer.getPredicate());
 
         List<TestEntity> testEntities = session.createQuery(query).list();
+
+        assertTrue(testEntities.size() == 1);
+        assertTrue(testEntities.get(0).getAge() == 30);
 
         session.close();
     }
